@@ -3,6 +3,7 @@ import { createInterface } from "readline";
 import { stdin as input, stdout as output, chdir, cwd } from "node:process";
 import os from "node:os";
 import { cd, ls, up } from "./src/navigation.js";
+import { add, cat } from "./src/basicOperations.js";
 
 const currentState = {
     userName: "",
@@ -35,6 +36,12 @@ const start = async () => {
                 break;
             case "ls":
                 await ls();
+                break;
+            case "cat":
+                await cat(arg1);
+                break;
+            case "add":
+                await add(arg1);
                 break;
             default:
                 console.log(`Unknown command ${command}`);

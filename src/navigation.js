@@ -32,13 +32,11 @@ export const cd = (pathToFolder) => {
 export const ls = async () => {
     try {
         const listOfNames = await readdir(process.cwd(), { withFileTypes: true });
-        const sortedList = [...listOfNames]
-            .map((name) => ({
-                Name: name.name,
-                Type: name.isFile() ? "file" : "directory",
-            }))
-            .sort((a, b) => b.Name - a.Name)
-            .sort((a, b) => a.Type - b.Type);
+        const listWithType = [...listOfNames].map((name) => ({
+            Name: name.name,
+            Type: name.isFile() ? "file" : "directory",
+        }));
+        const sortedList = listWithType.sort((a, b) => b.Name - a.Name).sort((a, b) => a.Type - b.Type);
 
         console.table(sortedList);
     } catch (e) {
