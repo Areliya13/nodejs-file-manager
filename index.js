@@ -2,7 +2,7 @@ import { getUserName } from "./src/userName.js";
 import { createInterface } from "readline";
 import { stdin as input, stdout as output, chdir, cwd } from "node:process";
 import os from "node:os";
-import { cd, up } from "./src/navigation.js";
+import { cd, ls, up } from "./src/navigation.js";
 
 const currentState = {
     userName: "",
@@ -32,6 +32,9 @@ const start = async () => {
                 break;
             case "cd":
                 cd(arg1);
+                break;
+            case "ls":
+                await ls();
                 break;
             default:
                 console.log(`Unknown command ${command}`);
