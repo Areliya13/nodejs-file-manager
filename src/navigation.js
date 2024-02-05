@@ -14,3 +14,16 @@ export const up = () => {
         console.log("Operation up failed");
     }
 };
+
+export const cd = (pathToFolder) => {
+    try {
+        if (pathToFolder.includes(":")) {
+            chdir(pathToFolder);
+        } else {
+            const currentFolder = path.join(cwd(), pathToFolder);
+            chdir(currentFolder);
+        }
+    } catch (e) {
+        console.log("Operation cd failed");
+    }
+};
