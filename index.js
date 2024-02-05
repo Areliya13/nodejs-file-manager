@@ -2,6 +2,7 @@ import { getUserName } from "./src/userName.js";
 import { createInterface } from "readline";
 import { stdin as input, stdout as output, chdir, cwd } from "node:process";
 import os from "node:os";
+import { up } from "./src/navigation.js";
 
 const currentState = {
     userName: "",
@@ -26,7 +27,11 @@ const start = async () => {
             case ".exit":
                 exit();
                 break;
+            case "up":
+                up();
+                break;
             default:
+                console.log(`Unknown command ${command}`);
                 break;
         }
 
