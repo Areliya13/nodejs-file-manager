@@ -5,8 +5,8 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "start": "node src/index.js",
-        "start:user": "node src/index.js --username=AlreadyBored"
+        "start": "node index.js",
+        "start:user": "node index.js --username=AlreadyBored"
     },
     "author": "Areliya13",
     "license": "ISC"
