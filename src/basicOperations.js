@@ -1,7 +1,7 @@
 import { cwd } from "node:process";
 import { rename, writeFile, rm as remove } from "node:fs/promises";
 import { createReadStream, createWriteStream } from "node:fs";
-import { resolvePath } from "./utils.js";
+import { isFile, resolvePath } from "./utils.js";
 import { basename } from "node:path";
 import { pipeline } from "node:stream/promises";
 
@@ -30,6 +30,7 @@ export const cp = async (fileName, dirname) => {
     const pathFrom = resolvePath(cwd(), fileName);
     const baseName = basename(pathFrom);
     const pathTo = resolvePath(resolvePath(cwd(), dirname), baseName);
+    if (!isFile(pathFrom)) throw new Error("Error!");
     const readStream = createReadStream(pathFrom, "utf8");
     const writeStream = createWriteStream(pathTo, { flags: "wx" });
     await pipeline(readStream, writeStream);

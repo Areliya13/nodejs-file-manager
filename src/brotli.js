@@ -7,6 +7,7 @@ import { pipeline } from "node:stream/promises";
 export const compress = async (fileToCompress, archive) => {
     const pathFrom = resolvePath(cwd(), fileToCompress);
     const pathTo = resolvePath(cwd(), archive);
+    if (!isFile(pathFrom)) throw new Error("Error!");
     const readableStream = createReadStream(pathFrom);
     const writableStream = createWriteStream(pathTo, { flags: "wx" });
     const transformStream = createBrotliCompress();
@@ -16,6 +17,7 @@ export const compress = async (fileToCompress, archive) => {
 export const decompress = async (archive, fileName) => {
     const pathFrom = resolvePath(cwd(), archive);
     const pathTo = resolvePath(cwd(), fileName);
+    if (!isFile(pathFrom)) throw new Error("Error!");
     const readableStream = createReadStream(pathFrom);
     const writableStream = createWriteStream(pathTo, { flags: "wx" });
     const transformStream = createBrotliDecompress();

@@ -1,6 +1,6 @@
 import { cwd, chdir } from "node:process";
 import { readdir } from "node:fs/promises";
-import { resolvePath } from "./utils.js";
+import { isDirectory, resolvePath } from "./utils.js";
 
 export const up = () => {
     chdir("..");
@@ -8,6 +8,7 @@ export const up = () => {
 
 export const cd = (pathToFolder) => {
     const path = resolvePath(cwd(), pathToFolder);
+    if (!isDirectory(path)) throw new Error("Error!");
     chdir(path);
 };
 
