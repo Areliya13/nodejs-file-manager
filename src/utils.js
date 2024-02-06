@@ -2,7 +2,7 @@ import { access, stat } from "fs/promises";
 import { resolve } from "path";
 
 export const resolvePath = (currentPath, changedPath) => {
-    return resolve(currentPath, changedPath);
+    return resolve(currentPath, changedPath.replace(/['"]/g, ""));
 };
 
 export const isExist = async (path) => {

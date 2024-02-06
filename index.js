@@ -4,6 +4,7 @@ import { stdin, stdout, chdir, cwd } from "node:process";
 import os from "node:os";
 import { cd, ls, up } from "./src/navigation.js";
 import { add, cat, rn } from "./src/basicOperations.js";
+import { messages } from "./src/messages.js";
 
 const currentState = {
     userName: "",
@@ -23,34 +24,38 @@ const start = async () => {
 
     readline.on("line", async (line) => {
         const [command, arg1, arg2] = line.trim().split(" ");
+        try {
+            switch (command) {
+                case ".exit":
+                    exit();
+                    break;
+                case "up":
+                    up();
+                    break;
+                case "cd":
+                    cd(arg1);
+                    break;
+                case "ls":
+                    await ls();
+                    break;
+                case "cat":
+                    await cat(arg1);
+                    break;
+                case "add":
+                    await add(arg1);
+                    break;
+                case "rn":
+                    await rn(arg1, arg2);
+                    break;
+                default:
+                    console.log(`Unknown command ${command}`);
+                    break;
+            }
 
-        switch (command) {
-            case ".exit":
-                exit();
-                break;
-            case "up":
-                up();
-                break;
-            case "cd":
-                cd(arg1);
-                break;
-            case "ls":
-                await ls();
-                break;
-            case "cat":
-                await cat(arg1);
-                break;
-            case "add":
-                await add(arg1);
-                break;
-            case "rn":
-                await rn(arg1, arg2);
-                break;
-            default:
-                console.log(`Unknown command ${command}`);
-                break;
+            console.log(messages.OperationSuccess);
+        } catch (error) {
+            console.log(messages.OperationFailed);
         }
-
         console.log(`You are currently in ${process.cwd()}`);
     });
 
