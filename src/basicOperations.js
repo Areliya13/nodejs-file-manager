@@ -1,9 +1,8 @@
-import { cwd, stdout } from "node:process";
-import { access, constants, rename, writeFile } from "node:fs/promises";
+import { cwd } from "node:process";
+import { rename, writeFile, rm as remove } from "node:fs/promises";
 import { createReadStream, createWriteStream } from "node:fs";
-import { extname, join, parse } from "node:path";
-import { isFile, resolvePath } from "./utils.js";
-import { messages } from "./messages.js";
+import { resolvePath } from "./utils.js";
+import { basename } from "node:path";
 import { pipeline } from "node:stream/promises";
 
 export const cat = async (fileName) => {
@@ -25,4 +24,25 @@ export const rn = async (oldFileName, newFilename) => {
     const fromPath = resolvePath(cwd(), oldFileName);
     const toPath = resolvePath(cwd(), newFilename);
     await rename(fromPath, toPath);
+};
+
+export const cp = async (fileName, dirname) => {
+    const pathFrom = resolvePath(cwd(), fileName);
+    const baseName = basename(pathFrom);
+    const pathTo = resolvePath(resolvePath(cwd(), dirname), baseName);
+    const readStream = createReadStream(pathFrom, "utf8");
+    const writeStream = createWriteStream(pathTo, { flags: "wx" });
+    await pipeline(readStream, writeStream);
+};
+
+export const mv = async (fileName, dirName) => {
+    // const pathFrom = resolvePath(cwd(), fileName);
+    // const pathTo = resolvePath(cwd(), dirName);
+    await cp(fileName, dirName);
+    await rm(fileName);
+};
+
+export const rm = async (fileName) => {
+    const pathToFile = resolvePath(cwd(), fileName);
+    await remove(pathToFile);
 };

@@ -3,7 +3,7 @@ import { createInterface } from "readline";
 import { stdin, stdout, chdir, cwd } from "node:process";
 import os from "node:os";
 import { cd, ls, up } from "./src/navigation.js";
-import { add, cat, rn } from "./src/basicOperations.js";
+import { add, cat, cp, mv, rn, rm } from "./src/basicOperations.js";
 import { messages } from "./src/messages.js";
 
 const currentState = {
@@ -47,14 +47,24 @@ const start = async () => {
                 case "rn":
                     await rn(arg1, arg2);
                     break;
+                case "cp":
+                    await cp(arg1, arg2);
+                    break;
+                case "mv":
+                    await mv(arg1, arg2);
+                    break;
+                case "rm":
+                    await rm(arg1);
+                    break;
                 default:
                     console.log(`Unknown command ${command}`);
-                    break;
+                    throw new Error("Error! Unknown command!");
             }
 
             console.log(messages.OperationSuccess);
         } catch (error) {
             console.log(messages.OperationFailed);
+            // console.log(error.toString());
         }
         console.log(`You are currently in ${process.cwd()}`);
     });
