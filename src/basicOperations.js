@@ -1,7 +1,7 @@
 import process from "node:process";
-import { access, constants, writeFile } from "node:fs/promises";
-import { createReadStream } from "node:fs";
-import { extname, join } from "node:path";
+import { access, constants, rename, writeFile } from "node:fs/promises";
+import { createReadStream, createWriteStream } from "node:fs";
+import { extname, join, parse } from "node:path";
 
 export const cat = async (pathToFile) => {
     const isFile = extname(pathToFile);
@@ -24,26 +24,36 @@ export const cat = async (pathToFile) => {
     }
 };
 
-export const add = async (pathToFile) => {
-    const isFilePath = extname(pathToFile);
-    if (!isFilePath) {
+export const add = async (fileName) => {
+    const isFile = extname(fileName);
+    if (!isFile) {
         console.log("Wrong file name");
         return;
     }
 
-    const filename = join(process.cwd(), pathToFile);
+    const pathToFile = join(process.cwd(), fileName);
 
-    let hasFile = false;
+    let fileExist = false;
     try {
-        await access(filename, constants.W_OK);
-        hasFile = true;
+        await access(pathToFile, constants.W_OK);
+        fileExist = true;
     } catch (e) {}
 
-    if (hasFile) {
+    if (fileExist) {
         console.log("Operation add failed");
         return;
     }
 
-    await writeFile(filename, "");
-    console.log(`File ${pathToFile} created`);
+    await writeFile(pathToFile, "");
+    console.log(`File ${fileName} created`);
+};
+
+export const rn = async (pathToFile, newFilename) => {
+    const newPathToFile = join(parse(pathToFile).dir, newFilename);
+    try {
+        await rename(pathToFile, newPathToFile);
+        console.log(`File ${pathToFile} renamed to ${newFilename}`);
+    } catch (e) {
+        console.log("Operation rn failed");
+    }
 };
