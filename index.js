@@ -6,6 +6,8 @@ import { cd, ls, up } from "./src/navigation.js";
 import { add, cat, cp, mv, rn, rm } from "./src/basicOperations.js";
 import { messages } from "./src/messages.js";
 import { os } from "./src/osInfo.js";
+import { hash } from "./src/hash.js";
+import { compress, decompress } from "./src/brotli.js";
 
 const currentState = {
     userName: "",
@@ -59,6 +61,15 @@ const start = async () => {
                     break;
                 case "os":
                     await os(arg1);
+                    break;
+                case "hash":
+                    await hash(arg1);
+                    break;
+                case "compress":
+                    await compress(arg1, arg2);
+                    break;
+                case "decompress":
+                    await decompress(arg1, arg2);
                     break;
                 default:
                     console.log(`Unknown command ${command}`);

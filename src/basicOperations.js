@@ -36,8 +36,6 @@ export const cp = async (fileName, dirname) => {
 };
 
 export const mv = async (fileName, dirName) => {
-    // const pathFrom = resolvePath(cwd(), fileName);
-    // const pathTo = resolvePath(cwd(), dirName);
     await cp(fileName, dirName);
     await rm(fileName);
 };
