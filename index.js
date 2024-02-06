@@ -1,10 +1,11 @@
 import { getUserName } from "./src/userName.js";
 import { createInterface } from "readline";
 import { stdin, stdout, chdir, cwd } from "node:process";
-import os from "node:os";
+import { homedir } from "node:os";
 import { cd, ls, up } from "./src/navigation.js";
 import { add, cat, cp, mv, rn, rm } from "./src/basicOperations.js";
 import { messages } from "./src/messages.js";
+import { os } from "./src/osInfo.js";
 
 const currentState = {
     userName: "",
@@ -19,7 +20,7 @@ const start = async () => {
     currentState.userName = getUserName(process.argv) || "User";
     console.log(`Welcome to the File Manager, ${currentState.userName}!`);
     const readline = createInterface({ input: stdin, output: stdout });
-    readline.write(chdir(os.homedir()));
+    readline.write(chdir(homedir()));
     console.log(`You are currently in ${cwd()}`);
 
     readline.on("line", async (line) => {
@@ -55,6 +56,9 @@ const start = async () => {
                     break;
                 case "rm":
                     await rm(arg1);
+                    break;
+                case "os":
+                    await os(arg1);
                     break;
                 default:
                     console.log(`Unknown command ${command}`);
